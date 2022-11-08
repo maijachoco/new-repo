@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <assignments>
+        <name>Assign_Referral_Lead</name>
+        <label>Assign Referral Lead</label>
+        <locationX>1276</locationX>
+        <locationY>598</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Account_Referral__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Admin_ID.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.LeadSource</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Landing Page</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Referral_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Error_Handling</name>
+        <label>Error Handling</label>
+        <locationX>1109</locationX>
+        <locationY>394</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.LeadSource</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Landing Page</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Phone_Number_Region</name>
+        <label>Phone Number Region</label>
+        <locationX>1046</locationX>
+        <locationY>556</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Region_Phone_USA__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PhoneRegionCheck</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Phone_Number_Region_TZ</name>
+        <label>Phone Number Region &amp; TZ</label>
+        <locationX>1048</locationX>
+        <locationY>719</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Region_Phone_USA__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PhoneRegionCheck</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Time_Zone__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>TimeZoneFromPhone</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Phone_Number_Region_USA</name>
+        <label>Phone Number Region USA</label>
+        <locationX>1038</locationX>
+        <locationY>115</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Region_Phone_USA__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PhoneRegionCheck</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Company</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LeadNameUnknown</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Time_Zone__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>TimeZoneFromPhone</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Inbound_Created_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Way_of_Contact__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Phone</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Admin_ID_is_not_blank</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Admin_ID_is_not_blank</name>
+        <label>Admin ID is not blank</label>
+        <locationX>1151</locationX>
+        <locationY>121</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Admin_ID_is_not_blankk</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>PardotId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CheckLengthofPardotID</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>5.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Admin_ID</targetReference>
+            </connector>
+            <label>Pardot ID is not blank</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Inbound_Lead_Check</name>
+        <label>Is Inbound Lead?</label>
+        <locationX>769</locationX>
+        <locationY>118</locationY>
+        <defaultConnector>
+            <targetReference>Get_RecordTypeID_Supplier</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>IS_Inbound_Lead</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordTypeId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_RecordTypeID.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Phone_Number_Region_USA</targetReference>
+            </connector>
+            <label>Is Inbound Lead?</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Inbound_Lead_Check_0</name>
+        <label>Is Inbound Lead?</label>
+        <locationX>769</locationX>
+        <locationY>554</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>IS_Supplier_Lead_Timezone</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordTypeId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_RecordTypeID_Supplier.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Time_Zone__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Pardot_External_Id__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Phone_Number_Region</targetReference>
+            </connector>
+            <label>Is Supplier Lead &amp; Time Zone Set</label>
+        </rules>
+        <rules>
+            <name>Is_Supplier_Lead_NO_Time_Zone_Set</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordTypeId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_RecordTypeID_Supplier.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Time_Zone__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Phone_Number_Region_TZ</targetReference>
+            </connector>
+            <label>Is Supplier Lead &amp; NO Time Zone Set</label>
+        </rules>
+    </decisions>
+    <description>Changed Admin ID Lookup from Lead to Account</description>
+    <formulas>
+        <name>CheckLengthofPardotID</name>
+        <dataType>Number</dataType>
+        <expression>LEN ({!$Record.Pardot_External_Id__c})</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>LeadNameUnknown</name>
+        <dataType>String</dataType>
+        <expression>IF({!$Record.Company} = &apos;[[Unknown]]&apos;, {!$Record.Email}&amp; &apos; &apos;&amp;{!$Record.Phone}, {!$Record.Company})</expression>
+    </formulas>
+    <formulas>
+        <name>PardotId</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Pardot_External_Id__c}</expression>
+    </formulas>
+    <formulas>
+        <name>Phone_US_AreaCode</name>
+        <dataType>String</dataType>
+        <expression>MID({!$Record.Phone},3,3)</expression>
+    </formulas>
+    <formulas>
+        <name>PhoneRegionCheck</name>
+        <dataType>String</dataType>
+        <expression>IF(
+CONTAINS({!$Label.Region_3E_Phone}, {!Phone_US_AreaCode}),
+&apos;Region 3E&apos;,
+IF(CONTAINS({!$Label.Region_3W_Phone},  {!Phone_US_AreaCode}),
+&apos;Region 3W&apos;,
+&apos;&apos;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>TimeZoneFromPhone</name>
+        <dataType>String</dataType>
+        <expression>IF(CONTAINS( $Label.Region_1_Phone , LEFT( {!$Record.Phone},3)),&apos;Europe/Amsterdam&apos;,
+IF(CONTAINS( $Label.Region_2_Phone , LEFT(  {!$Record.Phone},3)),&apos;Europe/Amsterdam&apos;,
+IF(CONTAINS( $Label.Region_4_Phone , LEFT(  {!$Record.Phone},3)),&apos;Europe/Amsterdam&apos;,
+IF(AND(LEFT( {!$Record.Phone},2) = &apos;+1&apos;,  {!$Record.Country}!= &apos;Canada&apos;), 
+IF(CONTAINS({!$Label.TZ_Phone_EST}, {!Phone_US_AreaCode}),&apos;America/New_York&apos;,
+IF(CONTAINS({!$Label.TZ_Phone_CST}, {!Phone_US_AreaCode}),&apos;America/Chicago&apos;,
+IF(CONTAINS({!$Label.TZ_Phone_PST}, {!Phone_US_AreaCode}),&apos;America/Los_Angeles&apos;,
+IF(CONTAINS({!$Label.TZ_Phone_MST}, {!Phone_US_AreaCode}),&apos;America/Denver&apos;,
+IF(CONTAINS({!$Label.TZ_Phone_HAST}, {!Phone_US_AreaCode}),&apos;Pacific/Honolulu&apos;,
+IF(CONTAINS({!$Label.TZ_Phone_AST}, {!Phone_US_AreaCode}),&apos;America/Halifax&apos;,
+IF(CONTAINS({!$Label.TZ_Phone_AKST}, {!Phone_US_AreaCode}),&apos;America/Anchorage&apos;,&apos;&apos;)
+)
+)
+)
+)
+)
+)
+,
+&apos;&apos;)
+)
+)
+)</expression>
+    </formulas>
+    <interviewLabel>Inbound Phone Region USA {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Lead Enrichment (Region &amp; TZ) from Phone Number</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Admin_ID</name>
+        <label>Get Admin ID</label>
+        <locationX>1359</locationX>
+        <locationY>117</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Referral_Lead</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Error_Handling</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Admin_ID__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>PardotId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_RecordTypeID</name>
+        <label>Get RecordTypeID</label>
+        <locationX>518</locationX>
+        <locationY>116</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Inbound_Lead_Check</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Inbound</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_RecordTypeID_Supplier</name>
+        <label>Get_RecordTypeID_Supplier</label>
+        <locationX>777</locationX>
+        <locationY>329</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Inbound_Lead_Check_0</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Supplier</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>45</locationX>
+        <locationY>49</locationY>
+        <connector>
+            <targetReference>Get_RecordTypeID</targetReference>
+        </connector>
+        <object>Lead</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>TestRecordVariable</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Lead</objectType>
+    </variables>
+</Flow>

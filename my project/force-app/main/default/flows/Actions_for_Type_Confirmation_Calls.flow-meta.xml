@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <choices>
+        <name>Choice_Confirmed_by_Supplier</name>
+        <choiceText>Confirmed by Supplier</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Confirmed by Supplier</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_Failure_prevented</name>
+        <choiceText>Failure prevented</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Failure prevented</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_No_Answer_Case_Closed</name>
+        <choiceText>No Answer - Case Closed</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>No Answer - Case Closed</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_NoAnswer_Mailbox_CaseClosed</name>
+        <choiceText>No Answer - Mailbox - Case Closed</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>No Answer - Mailbox - Case Closed</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_Order_Fuckup</name>
+        <choiceText>Order Fuckup</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Order Fuckup</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_Order_Processed</name>
+        <choiceText>Order Processed</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Order Processed</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_Trusted_Supplier</name>
+        <choiceText>Trusted Supplier</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Trusted Supplier</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>Decision_of_flow</name>
+        <label>Decision of flow</label>
+        <locationX>1159</locationX>
+        <locationY>261</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Confirmed_by_Supplier_True</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Choose_one_of_these_actions</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Confirmed by Supplier</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Confirmed_by_Supplier</targetReference>
+            </connector>
+            <label>Confirmed by Supplier True</label>
+        </rules>
+        <rules>
+            <name>Trusted_Supplier_True</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Choose_one_of_these_actions</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Trusted Supplier</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Trusted_Supplier</targetReference>
+            </connector>
+            <label>Trusted Supplier True</label>
+        </rules>
+        <rules>
+            <name>Order_Processed_True</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Choose_one_of_these_actions</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Order Processed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Order_Processed</targetReference>
+            </connector>
+            <label>Order Processed True</label>
+        </rules>
+        <rules>
+            <name>No_Answer_Case_Closed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Choose_one_of_these_actions</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>No Answer - Case Closed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_No_Answer</targetReference>
+            </connector>
+            <label>No Answer - Case Closed</label>
+        </rules>
+    </decisions>
+    <formulas>
+        <name>CurrentUser</name>
+        <dataType>String</dataType>
+        <expression>{!$User.Id}</expression>
+    </formulas>
+    <interviewLabel>Actions for Type Confirmation Calls {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case Actions for Type Confirmation Calls</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get</name>
+        <label>Current Case</label>
+        <locationX>795</locationX>
+        <locationY>275</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_User</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>OwnerId</queriedFields>
+        <queriedFields>Comments__c</queriedFields>
+        <queriedFields>Status</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_User</name>
+        <label>Get User</label>
+        <locationX>951</locationX>
+        <locationY>275</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_of_flow</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>CurrentUser</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Case</name>
+        <label>Update Case</label>
+        <locationX>528</locationX>
+        <locationY>265</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Case_Outcome__c</field>
+            <value>
+                <elementReference>Choose_one_of_these_actions</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Confirmed_by_Supplier</name>
+        <label>Update Confirmed by Supplier</label>
+        <locationX>1116</locationX>
+        <locationY>480</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Comments__c</field>
+            <value>
+                <stringValue>Confirmed by Supplier</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>CurrentUser</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_No_Answer</name>
+        <label>Update No Answer</label>
+        <locationX>1401</locationX>
+        <locationY>85</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Comments__c</field>
+            <value>
+                <stringValue>No Answer - Case Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>CurrentUser</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This should be used when a supplier cannot Confirm an order but has successfully processed it.</description>
+        <name>Update_Order_Processed</name>
+        <label>Update Order Processed</label>
+        <locationX>1114</locationX>
+        <locationY>62</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Comments__c</field>
+            <value>
+                <stringValue>Order Processed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>CurrentUser</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Trusted_Supplier</name>
+        <label>Update Trusted Supplier</label>
+        <locationX>1398</locationX>
+        <locationY>449</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Comments__c</field>
+            <value>
+                <stringValue>Trusted Supplier</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>CurrentUser</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <screens>
+        <name>List_Confirmation_Calls</name>
+        <label>List Confirmation Calls</label>
+        <locationX>390</locationX>
+        <locationY>264</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Update_Case</targetReference>
+        </connector>
+        <fields>
+            <name>Choose_one_of_these_actions</name>
+            <choiceReferences>Choice_Confirmed_by_Supplier</choiceReferences>
+            <choiceReferences>Choice_Trusted_Supplier</choiceReferences>
+            <choiceReferences>Choice_Order_Processed</choiceReferences>
+            <choiceReferences>Choice_No_Answer_Case_Closed</choiceReferences>
+            <choiceReferences>Choice_Failure_prevented</choiceReferences>
+            <choiceReferences>Choice_Order_Fuckup</choiceReferences>
+            <choiceReferences>Choice_NoAnswer_Mailbox_CaseClosed</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Choose one of these actions</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <pausedText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;Choose one of the above actions: &lt;/span&gt;&lt;/p&gt;</pausedText>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>258</locationY>
+        <connector>
+            <targetReference>List_Confirmation_Calls</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>RecordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

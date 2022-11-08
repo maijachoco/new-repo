@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <decisions>
+        <description>Checking if Growth Partnership Opportunity from the previous get records exist</description>
+        <name>Check_if_Growth_Partnership_Opportunity_Exist</name>
+        <label>Check if Growth Partnership Opportunity Exist</label>
+        <locationX>182</locationX>
+        <locationY>671</locationY>
+        <defaultConnectorLabel>If Opportunity Doesn&apos;t exist</defaultConnectorLabel>
+        <rules>
+            <name>If_Opportunity_exist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OpportunityToUpdate</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opportunity_Lookup_Field</targetReference>
+            </connector>
+            <label>If Opportunity exist</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_referral_date_filled_in</name>
+        <label>Is referral date filled in?</label>
+        <locationX>182</locationX>
+        <locationY>335</locationY>
+        <defaultConnector>
+            <targetReference>Get_opportunity_without_referral</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Referral date not filled in</defaultConnectorLabel>
+        <rules>
+            <name>Referral_date_filled</name>
+            <conditionLogic>(1 AND 2) OR (1 AND 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Referral_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Referral_Date__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_opportunity_0</targetReference>
+            </connector>
+            <label>Referral date filled</label>
+        </rules>
+    </decisions>
+    <description>An automation which populates a lookup field (lookup to opportunity),Partnership Start Date and Partnership End Date on referral object. This automation kicks off whenever a record is created in referral object. Before the automation populates the fields, it checks the below details:
+
+1) Check if there is a Growth Partnership opportunity associated to the account mentioned in the field Referral_By_Account__c.
+2) Then check if the created date of the referral record falls between Start_Date__c and End_Date__c of the associated Growth Partnership opportunity.
+
+If the above criterias are met, populate Partnership Start Date and Partnership end Date with the opportunity Start_Date__c and End_Date__c.
+Also populate the lookup field with the opportunity name.</description>
+    <environments>Default</environments>
+    <interviewLabel>Link Referral Object with Growth Opportunity {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Link Referral Object with Growth Opportunity</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Check if there is a Growth Partnership opportunity associated to the account mentioned in the field Referral_By_Account__c and if the created date of the referral record falls between Start_Date__c and End_Date__c of the associated Growth Partnership opportunity.</description>
+        <name>Get_opportunity_0</name>
+        <label>Get  opportunity with referral</label>
+        <locationX>50</locationX>
+        <locationY>455</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_if_Growth_Partnership_Opportunity_Exist</targetReference>
+        </connector>
+        <filterLogic>1 AND (2 AND 5) AND (3 OR 4)</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Referral_By_Account__r.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Timestamp_Growth_Signed_Onboarding__c</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <elementReference>$Record.Referral_Date__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Growth_Partnership</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Vendor_Package_3</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Timestamp_Growth_Signed_Onboarding__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <outputReference>OpportunityToUpdate</outputReference>
+        <queriedFields>Id</queriedFields>
+        <sortField>Id</sortField>
+        <sortOrder>Asc</sortOrder>
+    </recordLookups>
+    <recordLookups>
+        <description>Check if there is a Growth Partnership opportunity associated to the account mentioned in the field Referral_By_Account__c and if the created date of the referral record falls between Start_Date__c and End_Date__c of the associated Growth Partnership opportunity.</description>
+        <name>Get_opportunity_without_referral</name>
+        <label>Get  opportunity without referral</label>
+        <locationX>314</locationX>
+        <locationY>455</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_if_Growth_Partnership_Opportunity_Exist</targetReference>
+        </connector>
+        <filterLogic>1 AND (2 AND 5) AND (3 OR 4)</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Referral_By_Account__r.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Timestamp_Growth_Signed_Onboarding__c</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <elementReference>$Record.CreatedDate</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Growth_Partnership</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Vendor_Package_3</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Timestamp_Growth_Signed_Onboarding__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <outputReference>OpportunityToUpdate</outputReference>
+        <queriedFields>Id</queriedFields>
+        <sortField>Id</sortField>
+        <sortOrder>Asc</sortOrder>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Opportunity_Lookup_Field</name>
+        <label>Update Opportunity Lookup Field</label>
+        <locationX>50</locationX>
+        <locationY>791</locationY>
+        <inputAssignments>
+            <field>Opportunity__c</field>
+            <value>
+                <elementReference>OpportunityToUpdate.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_referral_date_filled_in</targetReference>
+        </connector>
+        <object>Referral__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>OpportunityToUpdate</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
+    </variables>
+</Flow>

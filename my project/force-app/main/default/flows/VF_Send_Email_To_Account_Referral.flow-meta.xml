@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Inbound_Existing_FYI</name>
+        <label>Inbound Existing FYI</label>
+        <locationX>1235</locationX>
+        <locationY>228</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>inbound_existing_account_body</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>Get_Account_Owner.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <elementReference>from_email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Inbound Account Handled: {!Get_Account.Name}</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_to_Referral_Account</name>
+        <label>Send Email to Referral Account</label>
+        <locationX>1236</locationX>
+        <locationY>71</locationY>
+        <actionName>Account.New_Account_Account_Referral</actionName>
+        <actionType>emailAlert</actionType>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>CurrentAccountId</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <apiVersion>49.0</apiVersion>
+    <constants>
+        <name>from_email</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>salesforce@choco.com</stringValue>
+        </value>
+    </constants>
+    <decisions>
+        <name>Owner_is_active</name>
+        <label>Owner is active</label>
+        <locationX>754</locationX>
+        <locationY>71</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Active</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Account_Owner.IsActive</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Which_email_to_send</targetReference>
+            </connector>
+            <label>Active</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Which_email_to_send</name>
+        <label>Which email to send?</label>
+        <locationX>973</locationX>
+        <locationY>75</locationY>
+        <defaultConnector>
+            <targetReference>Send_Email_to_Referral_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Account_Referral_Info</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>email_to_be_sent</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>account_referral</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_to_Referral_Account</targetReference>
+            </connector>
+            <label>Account Referral Info</label>
+        </rules>
+        <rules>
+            <name>Inbound_Existing_Account</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>email_to_be_sent</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>inbound_existing_account</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Inbound_Existing_FYI</targetReference>
+            </connector>
+            <label>Inbound Existing Account</label>
+        </rules>
+    </decisions>
+    <description>Starts through:  
+- Update from Lead into Account &amp; Email to referral (account_referral)
+- Inbound Leads Closing (inbound_existing_account)</description>
+    <interviewLabel>#vSend Email To Account Referral {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>VF Send Email To Account Owner</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Account</name>
+        <label>Get Account</label>
+        <locationX>410</locationX>
+        <locationY>69</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Account_Owner</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>CurrentAccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>OwnerId</queriedFields>
+        <queriedFields>ID_Account_Referral__c</queriedFields>
+        <queriedFields>Name_Account_Referral__c</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Account_Owner</name>
+        <label>Get Account Owner</label>
+        <locationX>580</locationX>
+        <locationY>69</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Owner_is_active</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Account.OwnerId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>Email</queriedFields>
+        <queriedFields>IsActive</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Get_Account</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>Body</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Hey {!Get_Account_Owner.FirstName}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Congrats! Thanks to your referral skills, &lt;a href=&quot;{!$Label.Server_URL}lightning/r/Account/{!Get_Account.ID_Account_Referral__c}/view&quot; target=&quot;_blank&quot;&gt;{!Get_Account.Name_Account_Referral__c}&lt;/a&gt; is now an Active User.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;ABR&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>inbound_existing_account_body</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>Hey {!Get_Account_Owner.FirstName},
+one of the contacts on your account {!Get_Account.Name} signed up for Choco (through web/app/landing page) and it was handled as an inbound lead. 
+
+Link to the inbound Lead: https://choco.lightning.force.com/{!CurrentLeadId}
+Link to your Account: https://choco.lightning.force.com/{!Get_Account.Id}
+Have a great day!</text>
+    </textTemplates>
+    <textTemplates>
+        <name>SenderEmail</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;salesforce@choco.com&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>CurrentAccountId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CurrentLeadId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>email_to_be_sent</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>account_referral</stringValue>
+        </value>
+    </variables>
+</Flow>

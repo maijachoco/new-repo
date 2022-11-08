@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>new_case_vendor_guide_request</name>
+        <label>new case vendor guide request</label>
+        <locationX>182</locationX>
+        <locationY>455</locationY>
+        <actionName>New_Case</actionName>
+        <actionType>quickAction</actionType>
+        <connector>
+            <targetReference>Get_currently_created_case_on_Lead</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Type</name>
+            <value>
+                <stringValue>Vendor Invite: Order Guide Upload</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Description</name>
+            <value>
+                <elementReference>Vendor_Invite_Case_2</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Due_Date__c</name>
+            <value>
+                <elementReference>newduedatefuture</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Lead__c</name>
+            <value>
+                <elementReference>Get_Related_Lead.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Region__c</name>
+            <value>
+                <elementReference>$Record.Region__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Region_Dropdown__c</name>
+            <value>
+                <elementReference>$Record.Region_Dropdown__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Subject</name>
+            <value>
+                <elementReference>CaseLeadSubject</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <apiVersion>53.0</apiVersion>
+    <assignments>
+        <name>add_to_list</name>
+        <label>add to list</label>
+        <locationX>138</locationX>
+        <locationY>1415</locationY>
+        <assignmentItems>
+            <assignToReference>commentList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>commentVar</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_over_case_comments</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assign_case_comment_variable</name>
+        <label>assign case comment variable</label>
+        <locationX>138</locationX>
+        <locationY>1295</locationY>
+        <assignmentItems>
+            <assignToReference>commentVar.ParentId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>caseId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>commentVar.CommentBody</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loop_over_case_comments.CommentBody</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>add_to_list</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>check_if_case_comments_and_case_id_present</name>
+        <label>check if case comments and case id present</label>
+        <locationX>182</locationX>
+        <locationY>1055</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>case_id_and_case_comments_present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseId</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseId</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>get_case_comments</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>loop_over_case_comments</targetReference>
+            </connector>
+            <label>case id and case comments present</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>duedateonebusinessday</name>
+        <dataType>Date</dataType>
+        <expression>{!$Flow.CurrentDateTime} +
+CASE( 
+  MOD( TODAY() - DATE( 1900, 1, 7 ), 7 ),
+  1,1,
+  2,1,
+  3, 1,
+  4, 1,
+  5, 3,
+  6, 2,
+  7, 1,
+1
+)</expression>
+    </formulas>
+    <formulas>
+        <description>adds one business day</description>
+        <name>newduedatefuture</name>
+        <dataType>DateTime</dataType>
+        <expression>{!$Flow.CurrentDateTime} +
+CASE( 
+  MOD( TODAY() - DATE( 1900, 1, 7 ), 7 ),
+  1,1,
+  2,1,
+  3, 1,
+  4, 1,
+  5, 3,
+  6, 2,
+  7, 1,
+1
+)</expression>
+    </formulas>
+    <interviewLabel>New Case Vendor Guide Upload Request {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>New Case Vendor Guide Upload Request</label>
+    <loops>
+        <name>loop_over_case_comments</name>
+        <label>loop over case comments</label>
+        <locationX>50</locationX>
+        <locationY>1175</locationY>
+        <collectionReference>get_case_comments</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>assign_case_comment_variable</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>create_comments</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>create_comments</name>
+        <label>create comments</label>
+        <locationX>50</locationX>
+        <locationY>1631</locationY>
+        <inputReference>commentList</inputReference>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_all_attachments</name>
+        <label>Get all attachments</label>
+        <locationX>182</locationX>
+        <locationY>695</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Copy_Attachments</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>LinkedEntityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>ContentDocumentLink</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_case_comments</name>
+        <label>get case comments</label>
+        <locationX>182</locationX>
+        <locationY>935</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>check_if_case_comments_and_case_id_present</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>caseId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>CaseComment</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_currently_created_case_on_Lead</name>
+        <label>Get currently created case on Lead</label>
+        <locationX>182</locationX>
+        <locationY>575</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_all_attachments</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Lead__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Related_Lead.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Related_Lead</name>
+        <label>Get Related Lead</label>
+        <locationX>182</locationX>
+        <locationY>335</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>new_case_vendor_guide_request</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Lead__r.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Related_Lead</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Short_Comment__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Transferred to Order Guide Upload</stringValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Copy_Attachments</name>
+        <label>Copy Attachments</label>
+        <locationX>182</locationX>
+        <locationY>815</locationY>
+        <connector>
+            <targetReference>get_case_comments</targetReference>
+        </connector>
+        <flowName>Copy_attachments_and_comments</flowName>
+        <inputAssignments>
+            <name>existingCaseRecord</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>newCaseRecord</name>
+            <value>
+                <elementReference>Get_currently_created_case_on_Lead</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <textTemplates>
+        <name>CaseLeadSubject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{!$Record.Supplier_Account__r.Name} x {!$Record.Lead__r.Company}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>test_test</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;test_test&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Vendor_Invite_Case_2</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Vendor Invite Case&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>caseId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>Get_currently_created_case_on_Lead.Id</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>commentList</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>CaseComment</objectType>
+    </variables>
+    <variables>
+        <name>commentVar</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>CaseComment</objectType>
+    </variables>
+    <variables>
+        <name>contentDocList</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>ContentDocumentLink</objectType>
+    </variables>
+    <variables>
+        <name>contentDocVar</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>ContentDocumentLink</objectType>
+    </variables>
+    <variables>
+        <name>newCase</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Case</objectType>
+    </variables>
+    <variables>
+        <name>RecordId2</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

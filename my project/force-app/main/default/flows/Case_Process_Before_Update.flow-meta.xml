@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <assignments>
+        <name>Set_Case_Status_to_Rated</name>
+        <label>Set Case Status to Rated</label>
+        <locationX>1238</locationX>
+        <locationY>1775</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Rated</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Case_Origin_is_Email_to_Case</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_BL_Owner</name>
+        <label>Update BL Owner</label>
+        <locationX>1238</locationX>
+        <locationY>767</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Buyer_Lead_Owner_Email__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Lead__r.Owner:User.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>First_Reply_Time</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_First_Reply_Time</name>
+        <label>Update First Reply Time</label>
+        <locationX>1238</locationX>
+        <locationY>1103</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Timestamp_First_CS_Reply__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>New_Status_change</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_for_Region_1</name>
+        <label>Update for Region 1</label>
+        <locationX>50</locationX>
+        <locationY>2231</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Region_Dropdown__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 1</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Region__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 1</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Type</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>External Request</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Update_for_Region_2</name>
+        <label>Update for Region 2</label>
+        <locationX>314</locationX>
+        <locationY>2231</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Region_Dropdown__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 2</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Region__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 2</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Type</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>External Request</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Update_for_Region_3</name>
+        <label>Update for Region 3</label>
+        <locationX>578</locationX>
+        <locationY>2231</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Region_Dropdown__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 3</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Region__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 3</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Type</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>External Request</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Update_for_Region_4</name>
+        <label>Update for Region 4</label>
+        <locationX>842</locationX>
+        <locationY>2231</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Region_Dropdown__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 4</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Region__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 4</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Type</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>External Request</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Update_for_Region_5</name>
+        <label>Update for Region 5</label>
+        <locationX>1106</locationX>
+        <locationY>2231</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Region_Dropdown__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 5</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Region__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 5</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Type</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>External Request</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Update_for_Region_8</name>
+        <label>Update for Region 8</label>
+        <locationX>1370</locationX>
+        <locationY>2231</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Region_Dropdown__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 8</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Region__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Region 8</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Type</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>External Request</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Update_Owner</name>
+        <label>Update Owner</label>
+        <locationX>1238</locationX>
+        <locationY>1439</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.OwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Case_Rated</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_SA_Owner_Email</name>
+        <label>Update SA Owner Email</label>
+        <locationX>1238</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Supplier_Account_Owner_Email__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Supplier_Account__r.Owner.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Buyer_Lead_Owner_Email</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Buyer_Lead_Owner_Email</name>
+        <label>Buyer Lead Owner Email</label>
+        <locationX>1370</locationX>
+        <locationY>647</locationY>
+        <defaultConnector>
+            <targetReference>First_Reply_Time</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>lead_changed</name>
+            <conditionLogic>1 OR (2 AND 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Lead__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Lead__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_BL_Owner</targetReference>
+            </connector>
+            <label>lead changed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Case_Origin_is_Email_to_Case</name>
+        <label>Case Origin is Email to Case</label>
+        <locationX>1370</locationX>
+        <locationY>1991</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Email_to_case</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Origin</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Email to Case</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Regions</targetReference>
+            </connector>
+            <label>Email to case</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Case_Rated</name>
+        <label>Case Rated?</label>
+        <locationX>1370</locationX>
+        <locationY>1655</locationY>
+        <defaultConnector>
+            <targetReference>Case_Origin_is_Email_to_Case</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Info_Quality_CS_changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Info_Quality_CS__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Info_Quality_CS__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Case_Status_to_Rated</targetReference>
+            </connector>
+            <label>Info Quality CS changed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>First_Reply_Time</name>
+        <label>First Reply Time</label>
+        <locationX>1370</locationX>
+        <locationY>983</locationY>
+        <defaultConnector>
+            <targetReference>New_Status_change</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>status_changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_First_Reply_Time</targetReference>
+            </connector>
+            <label>status changed from new</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>New_Status_change</name>
+        <label>New Status change</label>
+        <locationX>1370</locationX>
+        <locationY>1319</locationY>
+        <defaultConnector>
+            <targetReference>Case_Rated</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>status_changed_and_owner_is_queue_not_changed</name>
+            <conditionLogic>1 AND 2 AND ((3 AND 5 AND 6 AND 7) OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.OwnerId</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.OwnerId</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>00G</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.Username</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>daniel.khachab@gmail.com</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.DeveloperName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>BPOForcontact</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.DeveloperName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>BPOInvisible</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.DeveloperName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>BPOMindbridge</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Owner</targetReference>
+            </connector>
+            <label>status changed and owner is queue(not changed)</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Regions</name>
+        <label>Regions</label>
+        <locationX>842</locationX>
+        <locationY>2111</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Region_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Region_1</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_for_Region_1</targetReference>
+            </connector>
+            <label>Region 1</label>
+        </rules>
+        <rules>
+            <name>Region_2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Region_2</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_for_Region_2</targetReference>
+            </connector>
+            <label>Region 2</label>
+        </rules>
+        <rules>
+            <name>Region_3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Region_3</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_for_Region_3</targetReference>
+            </connector>
+            <label>Region 3</label>
+        </rules>
+        <rules>
+            <name>Region_4</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Region_4</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_for_Region_4</targetReference>
+            </connector>
+            <label>Region 4</label>
+        </rules>
+        <rules>
+            <name>Region_5</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Region_5</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_for_Region_5</targetReference>
+            </connector>
+            <label>Region 5</label>
+        </rules>
+        <rules>
+            <name>Region_8</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Region_8</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_for_Region_8</targetReference>
+            </connector>
+            <label>Region 8</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Supplier_Account_Owner_Email</name>
+        <label>Supplier Account Owner Email</label>
+        <locationX>1370</locationX>
+        <locationY>311</locationY>
+        <defaultConnector>
+            <targetReference>Buyer_Lead_Owner_Email</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>True</name>
+            <conditionLogic>1 OR (2 AND 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Supplier_Account__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Supplier_Account__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_SA_Owner_Email</targetReference>
+            </connector>
+            <label>True</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Case Process Before Update {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case Process Before Update</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>1244</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Supplier_Account_Owner_Email</targetReference>
+        </connector>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
