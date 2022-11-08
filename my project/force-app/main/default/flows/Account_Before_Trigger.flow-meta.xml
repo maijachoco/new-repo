@@ -2,7 +2,7 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>54.0</apiVersion>
     <decisions>
-        <name>Check_Account_Status_along_with_Related_Contact</name>
+        <name>Check_Account_Status_along_with_Related_Contacts</name>
         <label>Check Account Status along with Related Contact</label>
         <locationX>908</locationX>
         <locationY>311</locationY>
